@@ -8,6 +8,9 @@ contract ShardDAO {
     /// @notice An event that is emitted when a group of participants is registered
     event Register(address[] particants, Roles assignedRole, uint registeredAt);
 
+    /// @notice Voted event is emitted after a succesful casting of vote
+    event Voted(address voter);
+
     /// @notice Enumeration of all posible roles an address can be assigned
     enum Roles {
         CHAIRMAN,
@@ -97,5 +100,18 @@ contract ShardDAO {
         emit Register(teachers, Roles.TEACHER, block.timestamp);
     }
 
+    /// @notice Cast your vote
+    /// @param _contestantId to identify who the voter is voting for
+    function vote(uint _contestantId) external {
+        require(particants[msg.sender].registered, "Not eligible to vote, please register");
+        Participant storage voter = particants[msg.sender];
+        require(!voter.voted, "Already voted.");
+        voter.voted = true;
 
+        // If `_contestantId` is out of the range of the array,
+        // this will throw automatically and revert all
+        // changes.
+        contestants[_contestantId].voteCount += 1;
+        emit Voted(msg.sender);
+    }
 }
