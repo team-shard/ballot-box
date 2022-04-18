@@ -1,9 +1,10 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 /// @notice This is a contract that depicts the features of voting in a decentralized autonomous organization
-contract ShardDAO {
+contract ShardDAO is Pausable {
 
     /// @notice An event that is emitted when a group of participants is registered
     event Register(address[] particants, Roles assignedRole, uint registeredAt);
@@ -102,7 +103,7 @@ contract ShardDAO {
 
     /// @notice Cast your vote
     /// @param _contestantId to identify who the voter is voting for
-    function vote(uint _contestantId) external {
+    function vote(uint _contestantId) external whenNotPaused {
         require(particants[msg.sender].registered, "Not eligible to vote, please register");
         Participant storage voter = particants[msg.sender];
         require(!voter.voted, "Already voted.");
@@ -132,5 +133,17 @@ contract ShardDAO {
             returns (address winnerName_)
     {
         winnerName_ = contestants[winningContestant()].contestantAddress;
+    }
+
+    
+    ///@notice Emergency stop election
+    function pause() external onlyChairman {
+        _pause();
+    }
+
+    
+    /// @notice Switch to continue the election
+    function unpause() external onlyChairman {
+        _unpause();
     }
 }
