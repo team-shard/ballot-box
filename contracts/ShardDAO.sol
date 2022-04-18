@@ -1,12 +1,16 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 /// @notice This is a contract that depicts the features of voting in a decentralized autonomous organization
-contract ShardDAO {
+contract ShardDAO is Pausable {
 
     /// @notice An event that is emitted when a group of participants is registered
     event Register(address[] particants, Roles assignedRole, uint registeredAt);
+
+    /// @notice Voted event is emitted after a succesful casting of vote
+    event Voted(address voter);
 
     /// @notice Enumeration of all posible roles an address can be assigned
     enum Roles {
@@ -97,5 +101,49 @@ contract ShardDAO {
         emit Register(teachers, Roles.TEACHER, block.timestamp);
     }
 
+    /// @notice Cast your vote
+    /// @param _contestantId to identify who the voter is voting for
+    function vote(uint _contestantId) external whenNotPaused {
+        require(particants[msg.sender].registered, "Not eligible to vote, please register");
+        Participant storage voter = particants[msg.sender];
+        require(!voter.voted, "Already voted.");
+        voter.voted = true;
 
+        // If `_contestantId` is out of the range of the array,
+        // this will throw automatically and revert all
+        // changes.
+        contestants[_contestantId].voteCount += 1;
+        emit Voted(msg.sender);
+    }
+
+    /// @dev Computes the election results
+    function winningContestant() internal view
+            returns (uint winningContestant_)
+    {
+        uint winningVoteCount = 0;
+        for (uint p = 0; p < contestants.length; p++) {
+            if (contestants[p].voteCount > winningVoteCount) {
+                winningVoteCount = contestants[p].voteCount;
+                winningContestant_ = p;
+            }
+        }
+    }
+    /// @notice returns the address of the winner
+    function winnerName() external view onlyChairman
+            returns (address winnerName_)
+    {
+        winnerName_ = contestants[winningContestant()].contestantAddress;
+    }
+
+    
+    ///@notice Emergency stop election
+    function pause() external onlyChairman {
+        _pause();
+    }
+
+    
+    /// @notice Switch to continue the election
+    function unpause() external onlyChairman {
+        _unpause();
+    }
 }
