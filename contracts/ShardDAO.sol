@@ -114,4 +114,18 @@ contract ShardDAO {
         contestants[_contestantId].voteCount += 1;
         emit Voted(msg.sender);
     }
+
+    /// @dev Computes the election results
+    function winningContestant() internal view
+            returns (uint winningContestant_)
+    {
+        uint winningVoteCount = 0;
+        for (uint p = 0; p < contestants.length; p++) {
+            if (contestants[p].voteCount > winningVoteCount) {
+                winningVoteCount = contestants[p].voteCount;
+                winningContestant_ = p;
+            }
+        }
+    }
+
 }
