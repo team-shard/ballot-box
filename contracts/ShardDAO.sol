@@ -127,5 +127,10 @@ contract ShardDAO {
             }
         }
     }
-
+    /// @notice returns the address of the winner
+    function winnerName() external view onlyChairman
+            returns (address winnerName_)
+    {
+        winnerName_ = contestants[winningContestant()].contestantAddress;
+    }
 }
