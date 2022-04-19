@@ -193,5 +193,15 @@ contract ShardDAO is Pausable, AccessControl {
     function unpause() external onlyRole(Chairman) {
         _unpause();
     }
-
+    
+    /// @dev the passed argument should be the intended duration in seconds
+    /// @notice Allows the chairman or teacher role to reset the duration of an election
+    /// @param _time the duration of an election
+    function setVoteTime(uint _time) public 
+            onlyRole(Chairman) onlyRole(Teachers) whenEnded
+            returns (bool) 
+    {
+        timeToVote = _time;
+        return true;
+    }
 }
