@@ -1,29 +1,45 @@
 import './App.css';
-import Button from './components/button/Button';
+import {BrowserRouter as Router, Routes, Route, BrowserRouter} from 'react-router-dom';
+import Home from './pages/Home/Home';
+import Admin from './pages/Admin/Admin';
+import Election from './pages/Election/Election';
+import Teacher from './pages/teacher/Teacher';
+import Student from './pages/student/Student';
+import Board from './pages/board/Board';
+import New from './pages/New/New';
 
-function App() {
+
+function App()
+{
   return (
     <div className="App">
-      <header className="App-header">
-        <span href='/' className='logo'>Zuri.</span>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/" className='pry-btn'>Sign in</a>
-          <a href="/" className='sec-btn'>Enroll</a>
-        </nav>
-      </header>
-
-      <main>
-        <div className='hero'>
-        <h1>The <span>No. 1 </span> <br/>
-        World Class Organisation where tech talents are brewed
-        </h1>
-        <p> Register now to kickstart your career
-        </p>
-       <Button text='Connect your wallet' />
-        </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/">
+            <Route index element={<Home />} />  
+            <Route path="admin" >
+            <Route index element={<Admin />} />  
+              <Route path='board' element={<Board/>} />
+              <Route path='teacher' element={<Teacher/>} />
+              <Route path='new' element={<New/>} />
+            </Route>
+            <Route path="election" element={<Election />} />
+            <Route path="student" element={<Student />} />
+            
+          </Route>
+        </Routes>
+      </BrowserRouter>
+      {/* <Router>
+        {/* <Navbar /> */}
+        {/* <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/election" element={<Election />} />
+        </Routes>
+     
         
-      </main>
+      </Router> */}
+     
     </div>
   );
 }

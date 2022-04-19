@@ -1,0 +1,30 @@
+
+.Home{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+  
+    
+  }
+  .Home h1{
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    margin: 2rem auto;
+    text-transform: capitalize;
+    width: 60vw;
+  }
+  .Home h1 span{
+    color: var(--primary-color);
+  }
+  
+  .Home p {
+    font-size: 1.2rem;
+    color: #fff;
+    text-align: center;
+    margin: 2rem auto;
+    width: 90vw;
+  }
