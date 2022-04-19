@@ -1,0 +1,87 @@
+:root{
+  --bg: #222;
+  --primary-color: #406CEE;
+}
+
+body{
+  background: var(--bg);
+}
+
+header{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  padding: 1rem 3rem;
+ }
+
+header .logo{
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+header nav{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+header nav a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: .8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.pry-btn{
+  background: var(--primary-color);
+  color: #fff;
+  padding: .8rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.sec-btn{
+  color: var(--primary-color);
+  padding: .8rem;
+  border-radius: 5px;
+  border: 1px solid var(--primary-color);
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+main{
+  margin: 0 auto;
+}
+.hero{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 80vh;
+
+  
+}
+.hero h1{
+  font-size: 3rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  margin: 2rem auto;
+  text-transform: capitalize;
+  width: 60vw;
+}
+.hero h1 span{
+  color: var(--primary-color);
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: #fff;
+  text-align: center;
+  margin: 2rem auto;
+  width: 90vw;
+}
