@@ -1,14 +1,13 @@
 .btn{
     background: var(--primary-color);
     color: #fff;
-    padding: 1rem;
+    padding: 1rem 2rem;
     border-radius: 5px;
     width: max-content;
     font-size: 1rem;
     font-weight: bold;
     text-transform: capitalize;
     transition: all 0.3s ease-in-out;
- 
     cursor: pointer;
     display: flex;
 }
