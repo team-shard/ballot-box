@@ -12,7 +12,7 @@ contract ShardDAO is Pausable, AccessControl {
     event Register(address[] particants, Roles assignedRole, uint registeredAt);
 
     /// @notice Voted event is emitted after a succesful casting of vote
-    event Voted(address voter);
+    event Voted(address voter, uint votedAt);
 
     /// @notice Enumeration of all posible roles an address can be assigned
     enum Roles {
@@ -124,7 +124,7 @@ contract ShardDAO is Pausable, AccessControl {
 
     /// @notice Cast your vote
     /// @param _contestantId to identify who the voter is voting for
-    function vote(uint _contestantId) external whenNotPaused onlyRole(Board) onlyRole(Teachers) onlyRole(Students) {
+    function vote(uint _contestantId) external whenNotPaused {
         require(particants[msg.sender].registered, "Not eligible to vote, please register");
         Participant storage voter = particants[msg.sender];
         require(!voter.voted, "Already voted.");
@@ -134,11 +134,11 @@ contract ShardDAO is Pausable, AccessControl {
         // this will throw automatically and revert all
         // changes.
         contestants[_contestantId].voteCount += 1;
-        emit Voted(msg.sender);
+        emit Voted(msg.sender, block.timestamp);
     }
 
     /// @dev Computes the election results
-    function winningContestant() internal view
+    function _winningContestant() internal view
             returns (uint winningContestant_)
     {
         uint winningVoteCount = 0;
@@ -154,7 +154,7 @@ contract ShardDAO is Pausable, AccessControl {
     function winnerNameAndAddress() external view onlyRole(Chairman) onlyRole(Board) onlyRole(Teachers)
             returns (string memory winnerName_, address winnerAddress_)
     {
-        uint index = winningContestant();
+        uint index = _winningContestant();
         winnerName_ = contestants[index].contestantName;
         winnerAddress_ = contestants[index].contestantAddress;
     }
@@ -169,9 +169,4 @@ contract ShardDAO is Pausable, AccessControl {
     function unpause() external onlyRole(Chairman) {
         _unpause();
     }
-
-    // function createContestant(string memory _contestantName) external {
-    //     contestants.push(Contestant({contestantName: _contestantName, 
-    //     contestantAddress: msg.sender, voteCount: 0}));
-    // }
 }
