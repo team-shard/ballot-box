@@ -57,6 +57,23 @@ contract ShardDAO is Pausable, AccessControl {
         particants[chairman] = Participant({voted: false, registered: true, role: Roles.CHAIRMAN});
     }
 
+    /// @param contestantName name of contestant to be added.
+    /// @param contestantAddress address of contestant to be added.
+    /// @dev adds the contestant with an id i
+    function addContestant(string[] memory contestantName, address[] memory contestantAddress) public onlyRole(Chairman) onlyRole(Teachers){
+
+         for (uint i = 0; i < contestantName.length; i++)
+         for (uint a = 0; i < contestantAddress.length; a++)
+         {
+            
+            contestants.push(Contestant({
+                contestantName: contestantName[i],
+                contestantAddress: contestantAddress[a],
+                voteCount:0
+            }));
+        }
+    }
+
     /// @notice Used to restrict access to certain features to only chairman.
     modifier onlyChairman {
         require(msg.sender == chairman, "Only Chairman can perform this action!");
@@ -107,7 +124,7 @@ contract ShardDAO is Pausable, AccessControl {
 
     /// @notice Cast your vote
     /// @param _contestantId to identify who the voter is voting for
-    function vote(uint _contestantId) external whenNotPaused {
+    function vote(uint _contestantId) external whenNotPaused onlyRole(Board) onlyRole(Teachers) onlyRole(Students) {
         require(particants[msg.sender].registered, "Not eligible to vote, please register");
         Participant storage voter = particants[msg.sender];
         require(!voter.voted, "Already voted.");
@@ -134,7 +151,7 @@ contract ShardDAO is Pausable, AccessControl {
     }
 
     /// @notice returns name and address of the winner
-    function winnerNameAndAddress() external view onlyRole(Chairman)
+    function winnerNameAndAddress() external view onlyRole(Chairman) onlyRole(Board) onlyRole(Teachers)
             returns (string memory winnerName_, address winnerAddress_)
     {
         uint index = winningContestant();
