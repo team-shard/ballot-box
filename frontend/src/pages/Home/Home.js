@@ -1,11 +1,17 @@
 import Button from '../../components/button/Button'
-import Navbar from '../../components/Navbar/Navbar'
 import './Home.css'
 
 export default function Home() {
   return (
     <div className='Home'> 
-      <Navbar />
+     <header className="App-header">
+    <span href='/' className='logo'>Zuri.</span>
+    <nav>
+      <a href="/">Home</a>
+      <Button  text="Sign In"  handleClick={()=> console.log("clicked")}></Button>
+      <Button  text="Enroll"  handleClick={()=> console.log("clicked")}></Button>
+    </nav>
+  </header>
 
     <h1>The <span>No. 1 </span> <br/>
     World Class Organisation where tech talents are brewed

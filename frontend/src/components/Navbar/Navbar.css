@@ -1,31 +1,4 @@
-header{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-    padding: 1rem 3rem;
-   }
-  
-  header .logo{
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    text-decoration: none;
-    text-transform: uppercase;
-  }
-  header nav{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-  }
-  header nav a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-size: .8rem;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
+
   .pry-btn{
     background: var(--primary-color);
     color: #fff;

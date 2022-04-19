@@ -1,3 +1,7 @@
 .Teacher{
     color: white;
+    display: flex;
+}
+.Teacher .container{
+ flex: 6;
 }

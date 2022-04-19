@@ -1,0 +1,45 @@
+.sidebar{
+    color: #fff;
+    flex: 1;
+    border-right: 1px solid #323232;
+    min-height: 100vh;
+    background-color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.top{
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.top  .logo{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+.sidebar hr{
+      border: 1px solid #323232;
+  }
+
+ .sidebar .center{
+      padding-left: 20px;
+  }
+
+  .sidebar .center ul{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+  }
+   li{
+    padding: 1rem;
+    cursor: pointer;
+  }
+  li:hover{
+      background-color: #444;
+  }
