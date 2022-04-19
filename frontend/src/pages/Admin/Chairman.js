@@ -1,4 +1,4 @@
-import './Admin.css'
+import './Chairman.css'
 
 export default function Chairman() {
   return (
