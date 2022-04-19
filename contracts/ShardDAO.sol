@@ -48,6 +48,16 @@ contract ShardDAO is Pausable, AccessControl {
     /// @notice This is the leadership postion that contestants will be voted for 
     string public nameOfPosition;
 
+    
+    // Voting start time
+    uint private startTime;
+
+    // Time that voters have to vote since startTime;
+    uint private timeToVote;
+
+    /// The vote has been called too late.
+    error TooLate();
+
     /// @notice Initializes the value of nameOfPosition variable, create and register chairman.
     /// @dev Takes in a string and assings it to nameOfPosition.
     /// @param _nameOfPosition name of position being contested.
@@ -55,6 +65,7 @@ contract ShardDAO is Pausable, AccessControl {
         nameOfPosition = _nameOfPosition;
         chairman = msg.sender;
         particants[chairman] = Participant({voted: false, registered: true, role: Roles.CHAIRMAN});
+        _pause();
     }
 
     /// @param contestantName name of contestant to be added.
@@ -121,10 +132,17 @@ contract ShardDAO is Pausable, AccessControl {
         }
         emit Register(teachers, Roles.TEACHER, block.timestamp);
     }
+    
+    modifier whenNotEnded() {
+        if (block.timestamp >= (startTime + timeToVote)) revert TooLate();
+        _;
+    }
 
     /// @notice Cast your vote
     /// @param _contestantId to identify who the voter is voting for
-    function vote(uint _contestantId) external whenNotPaused {
+    function vote(uint _contestantId) external 
+            whenNotPaused whenNotEnded 
+    {
         require(particants[msg.sender].registered, "Not eligible to vote, please register");
         Participant storage voter = particants[msg.sender];
         require(!voter.voted, "Already voted.");
@@ -150,13 +168,19 @@ contract ShardDAO is Pausable, AccessControl {
         }
     }
 
+    modifier whenEnded() {
+        require(block.timestamp >= (startTime + timeToVote));
+        _;
+    }
     /// @notice returns name and address of the winner
-    function winnerNameAndAddress() external view onlyRole(Chairman) onlyRole(Board) onlyRole(Teachers)
+    function winnerNameAndAddress() external  
+            onlyRole(Chairman) onlyRole(Board) onlyRole(Teachers) whenEnded whenNotPaused
             returns (string memory winnerName_, address winnerAddress_)
     {
         uint index = _winningContestant();
         winnerName_ = contestants[index].contestantName;
         winnerAddress_ = contestants[index].contestantAddress;
+        timeToVote = 0;
     }
     
     ///@notice Emergency stop election
@@ -165,8 +189,9 @@ contract ShardDAO is Pausable, AccessControl {
     }
 
     
-    /// @notice Switch to continue the election
+    /// @notice Switch to continue the election after an emergency stop`
     function unpause() external onlyRole(Chairman) {
         _unpause();
     }
+
 }
