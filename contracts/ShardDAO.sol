@@ -2,10 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "./accessControl.sol";
 
 /// @title A decentralized autonomous organization 
 /// @notice This is a contract that depicts the features of voting in a decentralized autonomous organization
-contract ShardDAO is Pausable {
+contract ShardDAO is Pausable, AccessControl {
 
     /// @notice An event that is emitted when a group of participants is registered
     event Register(address[] particants, Roles assignedRole, uint registeredAt);
@@ -133,7 +134,7 @@ contract ShardDAO is Pausable {
     }
 
     /// @notice returns name and address of the winner
-    function winnerNameAndAddress() external view onlyChairman
+    function winnerNameAndAddress() external view onlyRole(Chairman)
             returns (string memory winnerName_, address winnerAddress_)
     {
         uint index = winningContestant();
@@ -142,13 +143,13 @@ contract ShardDAO is Pausable {
     }
     
     ///@notice Emergency stop election
-    function pause() external onlyChairman {
+    function pause() external onlyRole(Chairman) {
         _pause();
     }
 
     
     /// @notice Switch to continue the election
-    function unpause() external onlyChairman {
+    function unpause() external onlyRole(Chairman) {
         _unpause();
     }
 

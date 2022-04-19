@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
-import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @dev All function calls are currently implemented without side effects
-contract AccessControl is Ownable{
+contract AccessControl {
 
      /** 
      @param role Admin right to be granted
@@ -53,7 +52,7 @@ contract AccessControl is Ownable{
      *  @param _account  address to be granted _role rights.
      *  @param _role hash for role.
      */
-    function grantRole(bytes32 _role, address _account) external onlyOwner {
+    function grantRole(bytes32 _role, address _account) external onlyRole(Chairman) {
         _grantRole(_role, _account);
     }
 
@@ -74,7 +73,7 @@ contract AccessControl is Ownable{
         @param _account   address to be removed 
         @param _role hash for role
 */
-    function removeRole(bytes32 _role, address _account) external onlyOwner {
+    function removeRole(bytes32 _role, address _account) external onlyRole(Chairman) {
         roles[_role][_account] = false; // remove role to the inputed address
         emit RemoveRoles(_role, _account);
     }
