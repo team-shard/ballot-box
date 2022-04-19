@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/security/Pausable.sol";
 
+/// @title A decentralized autonomous organization 
 /// @notice This is a contract that depicts the features of voting in a decentralized autonomous organization
 contract ShardDAO is Pausable {
 
@@ -29,6 +30,7 @@ contract ShardDAO is Pausable {
     
     /// @notice Struct representing all the features of a position contestant
     struct Contestant {
+        string contestantName;
         address contestantAddress;
         uint voteCount;
     }
@@ -37,7 +39,7 @@ contract ShardDAO is Pausable {
     mapping(address => Participant) public particants;
 
     /// @notice An array of contestants
-    Contestant[] private contestants;
+    Contestant[] public contestants;
 
     /// @notice Stores the address of chairman 
     address public chairman;
@@ -62,7 +64,8 @@ contract ShardDAO is Pausable {
 
     /// @notice Changes the name of position being contested for
     /// @dev Reassigns the value of nameOfPosition variable to input string
-    /// @param _nameOfPosition new name of position.
+    /// @param _nameOfPosition new name of position
+    /// @return bool a true value if action was successful
     function changeNameOfPosition(string memory _nameOfPosition) public onlyChairman returns (bool) {
         nameOfPosition = _nameOfPosition;
         return true;
@@ -128,13 +131,15 @@ contract ShardDAO is Pausable {
             }
         }
     }
-    /// @notice returns the address of the winner
-    function winnerName() external view onlyChairman
-            returns (address winnerName_)
-    {
-        winnerName_ = contestants[winningContestant()].contestantAddress;
-    }
 
+    /// @notice returns name and address of the winner
+    function winnerNameAndAddress() external view onlyChairman
+            returns (string memory winnerName_, address winnerAddress_)
+    {
+        uint index = winningContestant();
+        winnerName_ = contestants[index].contestantName;
+        winnerAddress_ = contestants[index].contestantAddress;
+    }
     
     ///@notice Emergency stop election
     function pause() external onlyChairman {
@@ -146,4 +151,9 @@ contract ShardDAO is Pausable {
     function unpause() external onlyChairman {
         _unpause();
     }
+
+    // function createContestant(string memory _contestantName) external {
+    //     contestants.push(Contestant({contestantName: _contestantName, 
+    //     contestantAddress: msg.sender, voteCount: 0}));
+    // }
 }
