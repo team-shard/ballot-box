@@ -193,7 +193,7 @@ contract ShardDAO is Pausable, AccessControl {
     function unpause() external onlyRole(Chairman) {
         _unpause();
     }
-    
+
     /// @dev the passed argument should be the intended duration in seconds
     /// @notice Allows the chairman or teacher role to reset the duration of an election
     /// @param _time the duration of an election
@@ -203,5 +203,17 @@ contract ShardDAO is Pausable, AccessControl {
     {
         timeToVote = _time;
         return true;
+    }
+
+    /// @notice Starts the election
+    /// @param _time Duration of the election
+    function startElection(uint _time) external 
+            onlyRole(Chairman) onlyRole(Teachers) 
+     {
+        require(timeToVote == 0, "Election has already started");
+        require(contestants.length > 0, "Please register at least one contestant");
+        startTime = block.timestamp;
+        require(setVoteTime(_time), "Unable to set duration of the votes");
+        _unpause();
     }
 }
