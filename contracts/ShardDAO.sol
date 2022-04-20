@@ -40,7 +40,7 @@ contract ShardDAO is Pausable, AccessControl {
     mapping(address => Participant) public particants;
 
     /// @notice An array of contestants
-    Contestant[] public contestants;
+    Contestant[] private contestants;
 
     /// @notice Stores the address of chairman 
     address public chairman;
@@ -57,6 +57,9 @@ contract ShardDAO is Pausable, AccessControl {
 
     /// The vote has been called too late.
     error TooLate();
+
+    /// @notice Total number of vote
+    uint256 private totalVoteCount;
 
     /// @notice Initializes the value of nameOfPosition variable, create and register chairman.
     /// @dev Takes in a string and assings it to nameOfPosition.
@@ -83,6 +86,28 @@ contract ShardDAO is Pausable, AccessControl {
                 voteCount:0
             }));
         }
+    }
+
+    /// @notice Returns details about all the contestants
+    /// @dev    Details returned are the one's stored in the blockchain on upload.
+    /// @return contestantName names of all contestants.
+    /// @return contestantAddress address of all contestants.
+    /// @return voteCount of all contestants.
+    function getAllContestants() external view
+    returns(string[] memory, address[] memory, uint[] memory) {
+        uint len = contestants.length;
+
+        string [] memory contestantName = new string[](len);
+        address [] memory contestantAddress = new address[](len);
+        uint [] memory voteCount = new uint[](len);
+
+        for (uint i = 0; i < len; i++) {
+            contestantName[i] = contestants[i].contestantName;
+            contestantAddress[i] = contestants[i].contestantAddress;
+            voteCount[i] = contestants[i].voteCount;
+        }
+
+        return(contestantName, contestantAddress, voteCount);
     }
 
     /// @notice Used to restrict access to certain features to only chairman.
@@ -153,7 +178,14 @@ contract ShardDAO is Pausable, AccessControl {
         // this will throw automatically and revert all
         // changes.
         contestants[_contestantId].voteCount += 1;
+        totalVoteCount++;
         emit Voted(msg.sender, block.timestamp);
+    }
+
+    /// @notice Return total number of votes
+    /// @return totalVoteCount 
+    function getTotalVoteCount() external view returns (uint){
+        return totalVoteCount;
     }
 
     /// @dev Computes the election results
