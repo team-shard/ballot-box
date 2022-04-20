@@ -134,6 +134,7 @@ contract ShardDAO is Pausable, AccessControl {
     }
     
     modifier whenNotEnded() {
+        require(timeToVote > 0, "Wait for election to start");
         if (block.timestamp >= (startTime + timeToVote)) revert TooLate();
         _;
     }
@@ -201,6 +202,7 @@ contract ShardDAO is Pausable, AccessControl {
             onlyRole(Chairman) onlyRole(Teachers) whenEnded
             returns (bool) 
     {
+        require(timeToVote > 0, "Only available after election starts");
         timeToVote = _time;
         return true;
     }
@@ -213,7 +215,7 @@ contract ShardDAO is Pausable, AccessControl {
         require(timeToVote == 0, "Election has already started");
         require(contestants.length > 0, "Please register at least one contestant");
         startTime = block.timestamp;
-        require(setVoteTime(_time), "Unable to set duration of the votes");
+        timeToVote = _time;
         _unpause();
     }
 }
