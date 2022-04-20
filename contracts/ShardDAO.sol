@@ -12,7 +12,7 @@ contract ShardDAO is Pausable, AccessControl {
     event Register(address[] particants, Roles assignedRole, uint registeredAt);
 
     /// @notice Voted event is emitted after a succesful casting of vote
-    event Voted(address voter);
+    event Voted(address voter, uint votedAt);
 
     /// @notice Enumeration of all posible roles an address can be assigned
     enum Roles {
@@ -40,13 +40,26 @@ contract ShardDAO is Pausable, AccessControl {
     mapping(address => Participant) public particants;
 
     /// @notice An array of contestants
-    Contestant[] public contestants;
+    Contestant[] private contestants;
 
     /// @notice Stores the address of chairman 
     address public chairman;
 
     /// @notice This is the leadership postion that contestants will be voted for 
     string public nameOfPosition;
+
+    
+    // Voting start time
+    uint private startTime;
+
+    // Time that voters have to vote since startTime;
+    uint private timeToVote;
+
+    /// The vote has been called too late.
+    error TooLate();
+
+    /// @notice Total number of vote
+    uint256 private totalVoteCount;
 
     /// @notice Initializes the value of nameOfPosition variable, create and register chairman.
     /// @dev Takes in a string and assings it to nameOfPosition.
@@ -55,23 +68,44 @@ contract ShardDAO is Pausable, AccessControl {
         nameOfPosition = _nameOfPosition;
         chairman = msg.sender;
         particants[chairman] = Participant({voted: false, registered: true, role: Roles.CHAIRMAN});
+        _pause();
     }
 
     /// @param contestantName name of contestant to be added.
     /// @param contestantAddress address of contestant to be added.
     /// @dev adds the contestant with an id i
-    function addContestant(string[] memory contestantName, address[] memory contestantAddress) public onlyRole(Chairman) onlyRole(Teachers){
-
-         for (uint i = 0; i < contestantName.length; i++)
-         for (uint a = 0; i < contestantAddress.length; a++)
-         {
-            
+    function addContestant(string[] memory contestantName, address[] memory contestantAddress) public  onlyRole(Chairman) {
+        require(contestantName.length == contestantAddress.length);
+        for (uint i = 0; i < contestantName.length; i++)
+         { 
             contestants.push(Contestant({
                 contestantName: contestantName[i],
-                contestantAddress: contestantAddress[a],
+                contestantAddress: contestantAddress[i],
                 voteCount:0
             }));
         }
+    }
+
+    /// @notice Returns details about all the contestants
+    /// @dev    Details returned are the one's stored in the blockchain on upload.
+    /// @return contestantName names of all contestants.
+    /// @return contestantAddress address of all contestants.
+    /// @return voteCount of all contestants.
+    function getAllContestants() external view
+    returns(string[] memory, address[] memory, uint[] memory) {
+        uint len = contestants.length;
+
+        string [] memory contestantName = new string[](len);
+        address [] memory contestantAddress = new address[](len);
+        uint [] memory voteCount = new uint[](len);
+
+        for (uint i = 0; i < len; i++) {
+            contestantName[i] = contestants[i].contestantName;
+            contestantAddress[i] = contestants[i].contestantAddress;
+            voteCount[i] = contestants[i].voteCount;
+        }
+
+        return(contestantName, contestantAddress, voteCount);
     }
 
     /// @notice Used to restrict access to certain features to only chairman.
@@ -121,10 +155,18 @@ contract ShardDAO is Pausable, AccessControl {
         }
         emit Register(teachers, Roles.TEACHER, block.timestamp);
     }
+    
+    modifier whenNotEnded() {
+        require(timeToVote > 0, "Wait for election to start");
+        if (block.timestamp >= (startTime + timeToVote)) revert TooLate();
+        _;
+    }
 
     /// @notice Cast your vote
     /// @param _contestantId to identify who the voter is voting for
-    function vote(uint _contestantId) external whenNotPaused onlyRole(Board) onlyRole(Teachers) onlyRole(Students) {
+    function vote(uint _contestantId) external 
+            whenNotPaused whenNotEnded 
+    {
         require(particants[msg.sender].registered, "Not eligible to vote, please register");
         Participant storage voter = particants[msg.sender];
         require(!voter.voted, "Already voted.");
@@ -134,11 +176,18 @@ contract ShardDAO is Pausable, AccessControl {
         // this will throw automatically and revert all
         // changes.
         contestants[_contestantId].voteCount += 1;
-        emit Voted(msg.sender);
+        totalVoteCount++;
+        emit Voted(msg.sender, block.timestamp);
+    }
+
+    /// @notice Return total number of votes
+    /// @return totalVoteCount 
+    function getTotalVoteCount() external view returns (uint){
+        return totalVoteCount;
     }
 
     /// @dev Computes the election results
-    function winningContestant() internal view
+    function _winningContestant() internal view
             returns (uint winningContestant_)
     {
         uint winningVoteCount = 0;
@@ -150,13 +199,19 @@ contract ShardDAO is Pausable, AccessControl {
         }
     }
 
+    modifier whenEnded() {
+        require(block.timestamp >= (startTime + timeToVote));
+        _;
+    }
     /// @notice returns name and address of the winner
-    function winnerNameAndAddress() external view onlyRole(Chairman) onlyRole(Board) onlyRole(Teachers)
+    function winnerNameAndAddress() external  
+            onlyRole(Chairman) onlyRole(Board) onlyRole(Teachers) whenEnded whenNotPaused
             returns (string memory winnerName_, address winnerAddress_)
     {
-        uint index = winningContestant();
+        uint index = _winningContestant();
         winnerName_ = contestants[index].contestantName;
         winnerAddress_ = contestants[index].contestantAddress;
+        timeToVote = 0;
     }
     
     ///@notice Emergency stop election
@@ -165,13 +220,32 @@ contract ShardDAO is Pausable, AccessControl {
     }
 
     
-    /// @notice Switch to continue the election
+    /// @notice Switch to continue the election after an emergency stop`
     function unpause() external onlyRole(Chairman) {
         _unpause();
     }
 
-    // function createContestant(string memory _contestantName) external {
-    //     contestants.push(Contestant({contestantName: _contestantName, 
-    //     contestantAddress: msg.sender, voteCount: 0}));
-    // }
+    /// @dev the passed argument should be the intended duration in seconds
+    /// @notice Allows the chairman or teacher role to reset the duration of an election
+    /// @param _time the duration of an election
+    function setVoteTime(uint _time) public 
+            onlyRole(Chairman) onlyRole(Teachers) whenEnded
+            returns (bool) 
+    {
+        require(timeToVote > 0, "Only available after election starts");
+        timeToVote = _time;
+        return true;
+    }
+
+    /// @notice Starts the election
+    /// @param _time Duration of the election
+    function startElection(uint _time) external 
+            onlyRole(Chairman) onlyRole(Teachers) 
+     {
+        require(timeToVote == 0, "Election has already started");
+        require(contestants.length > 0, "Please register at least one contestant");
+        startTime = block.timestamp;
+        timeToVote = _time;
+        _unpause();
+    }
 }
