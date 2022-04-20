@@ -74,7 +74,7 @@ contract ShardDAO is Pausable, AccessControl {
     /// @param contestantName name of contestant to be added.
     /// @param contestantAddress address of contestant to be added.
     /// @dev adds the contestant with an id i
-    function addContestant(string[] memory contestantName, address[] memory contestantAddress) public  onlyRole(Chairman) {
+    function addContestant(string[] memory contestantName, address[] memory contestantAddress) public  isChairOrTeach() {
         require(contestantName.length == contestantAddress.length);
         for (uint i = 0; i < contestantName.length; i++)
          { 
@@ -229,7 +229,7 @@ contract ShardDAO is Pausable, AccessControl {
     /// @notice Allows the chairman or teacher role to reset the duration of an election
     /// @param _time the duration of an election
     function setVoteTime(uint _time) public 
-            onlyRole(Chairman) onlyRole(Teachers) whenEnded
+            isChairOrTeach() whenEnded
             returns (bool) 
     {
         require(timeToVote > 0, "Only available after election starts");
@@ -240,7 +240,7 @@ contract ShardDAO is Pausable, AccessControl {
     /// @notice Starts the election
     /// @param _time Duration of the election
     function startElection(uint _time) external 
-            onlyRole(Chairman) onlyRole(Teachers) 
+            isChairOrTeach() 
      {
         require(timeToVote == 0, "Election has already started");
         require(contestants.length > 0, "Please register at least one contestant");

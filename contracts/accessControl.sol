@@ -35,6 +35,12 @@ contract AccessControl {
         _;
     }
 
+    modifier isChairOrTeach() {
+        require(roles[Chairman][msg.sender] || roles[Teachers][msg.sender]);
+        _;
+    }
+
+
     /// @notice admin rights are given to the deployer address
     constructor() {
         _grantRole(Chairman, msg.sender);
@@ -61,11 +67,24 @@ contract AccessControl {
         return roles[Chairman][_address];
     }
 
-    /// @dev verify if an address has chairman rights
+    /// @dev verify if an address has Board member rights
     function isBoard(address _address) public view returns (bool) {
         return roles[Board][_address];
     }
 
+    /// @dev verify if an address has Teachers rights
+    function isTeacher(address _address) public view returns (bool) {
+        return roles[Teachers][_address];
+    }
+
+    /// @dev verify if an address is a student 
+    function isStudent(address _address) public view returns (bool) {
+        return roles[Students][_address];
+    }
+    /// @notice verify if an address is an admin
+    function isAdminSH(address _address) public view returns(bool){
+        return roles[Chairman][_address] || roles[Board][_address] || roles[Teachers][_address];
+    }
 
     /** 
         @dev allows removal of roles 
