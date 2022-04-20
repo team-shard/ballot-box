@@ -1,5 +1,4 @@
 .sidebar{
-    color: #fff;
     flex: 1;
     border-right: 1px solid #323232;
     min-height: 100vh;
@@ -23,7 +22,7 @@
   }
 
 .sidebar hr{
-      border: 1px solid #323232;
+      border: 1px solid #555;
   }
 
  .sidebar .center{
@@ -37,9 +36,27 @@
 
   }
    li{
+    color: #aaa;
     padding: 1rem;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  svg {
+    width: 18px;
+    height: 18px;
+    color: #aaa;
+}
+path{
+    fill: #aaa;
+}
+
+  li span{
+      padding-left: 1rem;
   }
   li:hover{
       background-color: #444;
+      color: #fff;
   }
+

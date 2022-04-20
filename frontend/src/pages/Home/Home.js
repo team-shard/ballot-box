@@ -9,7 +9,7 @@ export default function Home() {
     <nav>
       <a href="/">Home</a>
       <Button  text="Sign In"  handleClick={()=> console.log("clicked")}></Button>
-      <Button  text="Enroll"  handleClick={()=> console.log("clicked")}></Button>
+      {/* <Button  text="Enroll"  handleClick={()=> console.log("clicked")}></Button> */}
     </nav>
   </header>
 

@@ -30,7 +30,6 @@ function App()
             </Route>
             <Route path="election" element={<Election />} />
             <Route path="student" element={<Student />} />
-            
           </Route>
         </Routes>
       </BrowserRouter>
