@@ -74,15 +74,13 @@ contract ShardDAO is Pausable, AccessControl {
     /// @param contestantName name of contestant to be added.
     /// @param contestantAddress address of contestant to be added.
     /// @dev adds the contestant with an id i
-    function addContestant(string[] memory contestantName, address[] memory contestantAddress) public onlyRole(Chairman) onlyRole(Teachers){
-
-         for (uint i = 0; i < contestantName.length; i++)
-         for (uint a = 0; i < contestantAddress.length; a++)
-         {
-            
+    function addContestant(string[] memory contestantName, address[] memory contestantAddress) public  onlyRole(Chairman) {
+        require(contestantName.length == contestantAddress.length);
+        for (uint i = 0; i < contestantName.length; i++)
+         { 
             contestants.push(Contestant({
                 contestantName: contestantName[i],
-                contestantAddress: contestantAddress[a],
+                contestantAddress: contestantAddress[i],
                 voteCount:0
             }));
         }
