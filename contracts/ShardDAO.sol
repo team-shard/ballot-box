@@ -9,24 +9,15 @@ import "./accessControl.sol";
 contract ShardDAO is Pausable, AccessControl {
 
     /// @notice An event that is emitted when a group of participants is registered
-    event Register(address[] particants, Roles assignedRole, uint registeredAt);
+    event Register(address[] particants, string assignedRole, uint registeredAt);
 
     /// @notice Voted event is emitted after a succesful casting of vote
     event Voted(address voter, uint votedAt);
-
-    /// @notice Enumeration of all posible roles an address can be assigned
-    enum Roles {
-        CHAIRMAN,
-        BOARDMEMBER,
-        TEACHER,
-        STUDENT
-    }
     
     /// @notice Struct representing all the features of a voting participant
     struct Participant {
         bool voted;
         bool registered;
-        Roles role;
     }
     
     /// @notice Struct representing all the features of a position contestant
@@ -47,7 +38,6 @@ contract ShardDAO is Pausable, AccessControl {
 
     /// @notice This is the leadership postion that contestants will be voted for 
     string public nameOfPosition;
-
     
     // Voting start time
     uint private startTime;
@@ -67,17 +57,30 @@ contract ShardDAO is Pausable, AccessControl {
     constructor(string memory _nameOfPosition) {
         nameOfPosition = _nameOfPosition;
         chairman = msg.sender;
-        particants[chairman] = Participant({voted: false, registered: true, role: Roles.CHAIRMAN});
+        particants[chairman] = Participant({voted: false, registered: true});
         _pause();
+    }
+
+
+    modifier whenEnded() {
+        require(block.timestamp >= (startTime + timeToVote));
+        _;
+    }
+
+    modifier whenNotEnded() {
+        require(timeToVote > 0, "Wait for election to start");
+        if (block.timestamp >= (startTime + timeToVote)) revert TooLate();
+        _;
     }
 
     /// @param contestantName name of contestant to be added.
     /// @param contestantAddress address of contestant to be added.
     /// @dev adds the contestant with an id i
     function addContestant(string[] memory contestantName, address[] memory contestantAddress) public  isChairOrTeach() {
-        require(contestantName.length == contestantAddress.length);
+        require(contestantName.length == contestantAddress.length, "Array lengths must match!");
         for (uint i = 0; i < contestantName.length; i++)
          { 
+            require(particants[contestantAddress[i]].registered, "Contestant not registered!"); 
             contestants.push(Contestant({
                 contestantName: contestantName[i],
                 contestantAddress: contestantAddress[i],
@@ -108,17 +111,12 @@ contract ShardDAO is Pausable, AccessControl {
         return(contestantName, contestantAddress, voteCount);
     }
 
-    /// @notice Used to restrict access to certain features to only chairman.
-    modifier onlyChairman {
-        require(msg.sender == chairman, "Only Chairman can perform this action!");
-        _;
-    }
 
     /// @notice Changes the name of position being contested for
     /// @dev Reassigns the value of nameOfPosition variable to input string
     /// @param _nameOfPosition new name of position
     /// @return bool a true value if action was successful
-    function changeNameOfPosition(string memory _nameOfPosition) public onlyChairman returns (bool) {
+    function changeNameOfPosition(string memory _nameOfPosition) public onlyRole(Chairman) returns (bool) {
         nameOfPosition = _nameOfPosition;
         return true;
     }
@@ -126,41 +124,40 @@ contract ShardDAO is Pausable, AccessControl {
     /// @notice This function registers group of address as students
     /// @dev Takes in an array of address input and assigns student role
     /// @param students An array of address 
-    function registerStudent(address[] memory students) public onlyChairman{
+    function registerStudent(address[] memory students) public isChairOrTeach(){
         for (uint i = 0; i < students.length; i++) {
             require(!particants[students[i]].registered, "Student already registered");
-            particants[students[i]] = Participant({voted: false, registered: true, role: Roles.STUDENT});
+            particants[students[i]] = Participant({voted: false, registered: true});
+            _grantRole(Students, students[i]);
         }
-        emit Register(students, Roles.STUDENT, block.timestamp);
+        emit Register(students, "STUDENT", block.timestamp);
     }
 
     /// @notice This function registers group of address as board members
     /// @dev Takes in an array of address input and assigns board member role
     /// @param board_members An array of address 
-    function registerBoardMember(address[] memory board_members) public onlyChairman{
+    function registerBoardMember(address[] memory board_members) public isChairOrTeach(){
         for (uint i = 0; i < board_members.length; i++) {
             require(!particants[board_members[i]].registered, "Board Member already registered");
-            particants[board_members[i]] = Participant({voted: false, registered: true, role: Roles.BOARDMEMBER});
+            particants[board_members[i]] = Participant({voted: false, registered: true});
+            _grantRole(Board, board_members[i]);
         }
-        emit Register(board_members, Roles.BOARDMEMBER, block.timestamp);
+        emit Register(board_members, "BOARD MEMBER", block.timestamp);
     }
 
     /// @notice This function registers group of address as teachers
     /// @dev Takes in an array of address input and assigns teacher role
     /// @param teachers An array of address 
-    function registerTeacher(address[] memory teachers) public onlyChairman{
+    function registerTeacher(address[] memory teachers) public isChairOrTeach(){
         for (uint i = 0; i < teachers.length; i++) {
             require(!particants[teachers[i]].registered, "Teacher already registered");
-            particants[teachers[i]] = Participant({voted: false, registered: true, role: Roles.TEACHER});
+            particants[teachers[i]] = Participant({voted: false, registered: true});
+            _grantRole(Teachers, teachers[i]);
         }
-        emit Register(teachers, Roles.TEACHER, block.timestamp);
+        emit Register(teachers, "TEACHER", block.timestamp);
     }
     
-    modifier whenNotEnded() {
-        require(timeToVote > 0, "Wait for election to start");
-        if (block.timestamp >= (startTime + timeToVote)) revert TooLate();
-        _;
-    }
+    
 
     /// @notice Cast your vote
     /// @param _contestantId to identify who the voter is voting for
@@ -199,13 +196,9 @@ contract ShardDAO is Pausable, AccessControl {
         }
     }
 
-    modifier whenEnded() {
-        require(block.timestamp >= (startTime + timeToVote));
-        _;
-    }
+    
     /// @notice returns name and address of the winner
-    function winnerNameAndAddress() external  
-            onlyRole(Chairman) onlyRole(Board) onlyRole(Teachers) whenEnded whenNotPaused
+    function winnerNameAndAddress() external isChairOrTeach() whenEnded whenNotPaused
             returns (string memory winnerName_, address winnerAddress_)
     {
         uint index = _winningContestant();
