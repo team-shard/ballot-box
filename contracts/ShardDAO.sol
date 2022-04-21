@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/security/Pausable.sol";
-import "./accessControl.sol";
+import "./AccessControl.sol";
 
 /// @title A decentralized autonomous organization 
 /// @notice This is a contract that depicts the features of voting in a decentralized autonomous organization
