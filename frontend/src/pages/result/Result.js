@@ -20,7 +20,7 @@ export default function Result() {
           </div>
 
 </div>
-        
+        s``
        
         </div>
 
