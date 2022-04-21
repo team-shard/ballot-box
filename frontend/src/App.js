@@ -4,9 +4,10 @@ import Home from './pages/Home/Home';
 import Chairman from './pages/Admin/Chairman';
 import Election from './pages/Election/Election';
 import Teacher from './pages/teacher/Teacher';
-import Student from './pages/student/Student';
-import Board from './pages/board/Board';
+// import Student from './pages/student/Student';
+import Result from './pages/result/Result';
 import New from './pages/New/New';
+import {Contract} from 'ethers';
 
 
 function App()
@@ -17,6 +18,7 @@ function App()
   //and 3 private routes ,
   //Chairman, Teacher, Board and New (For Creating New Election)
   return (
+
     <div className="App">
       <BrowserRouter>
         <Routes>
@@ -24,12 +26,11 @@ function App()
             <Route index element={<Home />} />  
             <Route path="admin" >
             <Route index element={<Teacher />} />  
-              <Route path='board' element={<Board/>} />
               <Route path='chairman' element={<Chairman/>} />
+              <Route path='result' element={<Result/>} />
               <Route path='new' element={<New/>} />
             </Route>
             <Route path="election" element={<Election />} />
-            <Route path="student" element={<Student />} />
           </Route>
         </Routes>
       </BrowserRouter>

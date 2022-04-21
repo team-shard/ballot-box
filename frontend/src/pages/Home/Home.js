@@ -1,5 +1,6 @@
 import Button from '../../components/button/Button'
 import './Home.css'
+import {Contract} from 'ethers';
 
 export default function Home() {
   return (

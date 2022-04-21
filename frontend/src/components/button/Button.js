@@ -1,4 +1,5 @@
 import './button.css'
+import {Contract} from 'ethers';
 export default function Button({ text, handleClick })
 {
   

@@ -8,7 +8,9 @@ console.log(ans)
 export default function Navbar() {
   return (
     <div className='navbar'>
+       <span href='/' className='logo'>Zuri.</span>
       <div className='wrapper'> 
+     
         <div className='nav-items'>
           <Button text={ans} />
           <a> Create New Election <Add /></a>
