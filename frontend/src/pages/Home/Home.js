@@ -4,24 +4,39 @@ import {Contract} from 'ethers';
 
 import React, { useEffect, useState } from "react";
 import { ethers, utils } from "ethers";
+import { useNavigate } from 'react-router';
 import Control from "../../contracts/AccessControl.json";
+import Chairman from '../Admin/Chairman';
+import Shard from "../../contracts/ShardDAO.json";
 
 export default function Home() {
   const[isWalletConnected,setIsWalletConnected] = useState(false);
   const [customerAddress, setCustomerAddress] = useState(null);
   const [modal, setModal] = useState(false);
   const [error, setError] = useState(null);
-  const [isAdmin, setUser] = useState(false);
+  const [isAdmin, setAdmin] = useState(false);
+  const [user, setUser] = useState("tgif");
+  let navigate = useNavigate();
 
   const checkIfWalletIsConnected = async () => {
     try {
       if (window.ethereum) {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const account = accounts[0];
-        setIsWalletConnected(true);
+       await setIsWalletConnected(true);
         setCustomerAddress(account);
         console.log("Account Connected: ", account);
-      } else {
+       getUserRole().then((data) => {
+        console.log("user:",data.role)
+        console.log("isAdmin :",data.isAdmin)
+        if(data.role === "not registered"){
+          navigate("/result",{replace:true})
+        }
+        else {data.isAdmin ? navigate("/chairmain",{replace:true}):navigate("/election",{replace:true})}
+       })
+      
+      } 
+      else {
         setError("Please install a MetaMask wallet to use our bank.");
         console.log("No Metamask detected");
       }
@@ -29,17 +44,26 @@ export default function Home() {
       console.log(error);
     }
   }
-
+   
   const getUserRole = async () => {
     try {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const controlContract = new ethers.Contract(0x6A08244EF41483B197847630709919BE209135A5, Control.abi, signer);
-  
-        let role = await controlContract.getUserRole(signer);
+        const shardContract = new ethers.Contract("0x6A08244EF41483B197847630709919BE209135A5", Shard.abi, signer);
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const account = accounts[0];
+        console.log("account :",account)
+        
+        let role = await shardContract.getUserRole(account);
+        console.log("getuser:",role)
         setUser(role);
-        console.log(role);
+        var isAdmin;
+        if(role === "Chairman"||"Board"||"Teachers"){setAdmin(true); isAdmin = true};
+        console.log("userRole",role);
+        return {role,isAdmin};
+    
+        
       } else {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our bank.");
@@ -49,14 +73,9 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    const getData = async () => {
+  
 
-        getUserRole();
-
-    };
-    getData().then(() => {});
-  });
+  
   return (
     <div className='Home'> 
      <header className="App-header">
@@ -74,7 +93,7 @@ export default function Home() {
     <h1>The <span>No. 1 </span> <br/>
     World Class Organisation where tech talents are brewed
     </h1>
-    <p> Register now to kickstart your career
+    <p> Register now to kickstart your career {user}
     </p>
    <Button text={isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"} handleClick={checkIfWalletIsConnected} /> 
     </div>
