@@ -86,6 +86,7 @@ contract AccessControl {
     /**
         @param _address user address to be verified
         @dev its used to check if an account has a role or not
+        @notice returns role as string
      */
     function getUserRole(address _address) public view returns (string memory) {
         if (roles[Chairman][_address]) return "Chairman";
