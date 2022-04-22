@@ -7,6 +7,7 @@ import Button from '../../components/button/Button';
 
 
 
+
 export default function Result() {
   return (
     <div className="result">
@@ -16,15 +17,9 @@ export default function Result() {
         <div className='Body'>
           <div className='election-title'>Governorship Election 
             <div className='button'><Button text='Stop Election' /> <span> | </span> <Button text='Start Election' /></div>
-            
           </div>
-
 </div>
-        s``
-       
         </div>
-
     </div>
   )
-}
-;
+};

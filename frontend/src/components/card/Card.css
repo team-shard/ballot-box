@@ -2,8 +2,9 @@
     width: 400px;
     height: 400px;
     margin: 1rem;
-    border: 2px dashed #ccc;
+    border: 2px solid #ccc;
     padding: 1rem;
+    border-radius: 10px;
 }
 .card:hover{
     border: 2px solid #ccc;

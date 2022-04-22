@@ -1,10 +1,10 @@
 .btn{
     background: var(--primary-color);
     color: #fff;
-    padding: clamp(0.5rem,.75rem ,1rem);
+    padding: 1rem;
     border-radius: 5px;
     width: max-content;
-    font-size: clamp(0.5rem,.75rem ,1rem);
+    font-size: 1rem;
     font-weight: bold;
     text-transform: capitalize;
     transition: all 0.3s ease-in-out;

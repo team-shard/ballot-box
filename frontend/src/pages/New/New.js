@@ -2,6 +2,7 @@ import Card from '../../components/card/Card'
 import Navbar from '../../components/Navbar/Navbar'
 import './New.css'
 import {Contract} from 'ethers';
+// import ABI from '../';
 
 export default function New() {
   return (
