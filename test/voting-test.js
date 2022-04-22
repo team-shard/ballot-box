@@ -184,6 +184,9 @@ it("Should allow authorized to set new time", async function () {
     tx = await shardDAOContract.setVoteTime(5);
     await tx.wait();
 
+    await expect(shardDAOContract.vote(0))
+    .to.emit(shardDAOContract, 'Voted')
+
     await expect(await shardDAOContract
       .timeToVote())
       .equals(5)
