@@ -95,7 +95,7 @@ export default function Home() {
     <h1>The <span>No. 1 </span> <br/>
     World Class Organisation where tech talents are brewed
     </h1>
-    <p> Register now to kickstart your career {user}
+    <p> Register now to kickstart your career 
     </p>
    <Button text={isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"} handleClick={checkIfWalletIsConnected} /> 
     </div>
