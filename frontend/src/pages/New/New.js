@@ -22,7 +22,8 @@ export default function New()
          
           
           <Card title='Add New Contestant' subtitle='Create New contestant to participate in election' />
-          <div>
+          <div className='newUser'>
+            <h1>Add New User to ZURI DAO</h1>
             <select
               name='option'
               value={option}
