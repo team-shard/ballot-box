@@ -82,8 +82,17 @@ contract AccessControl {
         return roles[Students][_address];
     }
     /// @notice verify if an address is an admin
-    function isAdminSH(address _address) external view returns(bool){
-        return roles[Chairman][_address] || roles[Board][_address] || roles[Teachers][_address];
+
+    function getUserRole(address _address) public view returns (string memory) {
+        if (roles[Chairman][_address]) return "Chairman";
+
+        if (roles[Board][_address]) return "Board";
+
+        if (roles[Teachers][_address]) return "Teachers";
+
+        if (roles[Students][_address]) return "Students";
+        return "not registered";
+
     }
 
     /** 
