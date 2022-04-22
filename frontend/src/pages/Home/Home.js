@@ -1,11 +1,21 @@
 import Button from '../../components/button/Button'
 import './Home.css'
-import { ethers } from 'ethers';
-import { useState, useEffect } from 'react';
 import abi from '../../contracts/ShardDAO.json';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { ethers, utils } from "ethers";
+import Control from "../../contracts/AccessControl.json";
+import Control2 from "../../contracts/ShardDAO.json";
 
-export var address 
+
+export  var  address;
+// export const shortenAddress = (address) =>
+// {
+//   const final = address.substring(0, 4) + "..." + address.substring(address.length - 4, address.length);
+//    return final
+// }
+
+
 export default function Home()
 {
   // const [currentAccount, setCurrentAccount] = useState("");
@@ -62,18 +72,16 @@ export default function Home()
   //   checkIfWalletIsConnected();
   // }, [])
 
-<<<<<<< HEAD
-=======
-import React, { useEffect, useState } from "react";
-import { ethers, utils } from "ethers";
-import Control from "../../contracts/AccessControl.json";
 
-export default function Home() {
+
+
   const[isWalletConnected,setIsWalletConnected] = useState(false);
   const [customerAddress, setCustomerAddress] = useState(null);
   const [modal, setModal] = useState(false);
   const [error, setError] = useState(null);
   const [isAdmin, setUser] = useState(false);
+
+  const contractAddress = "0x6A08244EF41483B197847630709919BE209135A5"
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -83,6 +91,8 @@ export default function Home() {
         setIsWalletConnected(true);
         setCustomerAddress(account);
         console.log("Account Connected: ", account);
+        address = account.substring(0, 4) + "..." + account.substring(account.length - 4, account.length);
+        console.log(address);
       } else {
         setError("Please install a MetaMask wallet to use our bank.");
         console.log("No Metamask detected");
@@ -97,7 +107,7 @@ export default function Home() {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const controlContract = new ethers.Contract(0x6A08244EF41483B197847630709919BE209135A5, Control.abi, signer);
+        const controlContract = new ethers.Contract(contractAddress, Control2.abi, signer);
   
         let role = await controlContract.getUserRole(signer);
         setUser(role);
@@ -119,22 +129,16 @@ export default function Home() {
     };
     getData().then(() => {});
   });
->>>>>>> 05d92cba35db66e654bd190c82fdf97b30b35fdb
   return (
     <div className='Home'> 
      <header className="App-header">
     <span href='/' className='logo'>Zuri.</span>
     <nav>
       <a href="/">Home</a>
-<<<<<<< HEAD
-      <Button  text="Sign In"  handleClick={connectWallet}></Button>
-=======
       {/* {isWalletConnected && <p><span className="font-bold">Your Wallet Address: </span>{customerAddress}</p>} */}
       {/* addressShortner(customerAddress); */}
       {/* <p> <span>{isWalletConnected }{customerAddress}</span></p> */}
-      
-      
->>>>>>> 05d92cba35db66e654bd190c82fdf97b30b35fdb
+
     </nav>
   </header>
 
@@ -142,14 +146,11 @@ export default function Home() {
     World Class Organization where tech talents are brewed
     </h1>
     <p> Register now to kickstart your career
-<<<<<<< HEAD
       </p>
-      <Link to="/election"><Button text='Connect your wallet' handleClick={connectWallet}/></Link>
-=======
-    </p>
-   <Button text={isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"} handleClick={checkIfWalletIsConnected} /> 
->>>>>>> 05d92cba35db66e654bd190c82fdf97b30b35fdb
+      <Link to='/election'>
+      <Button text={isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"} handleClick={checkIfWalletIsConnected} /> 
+      </Link>
+   
     </div>
-
   )
 }

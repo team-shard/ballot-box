@@ -1,10 +1,15 @@
 import Button from '../button/Button'
 import './Candidate.css'
-import {Contract} from 'ethers';
+import { ethers } from 'ethers';
+import Control2 from "../../contracts/ShardDAO.json";
 
 
 export default function Candidate()
 {
+  const vote = async () =>
+  { 
+    
+  } 
   return (
       <div className='candidate'>
 
@@ -13,7 +18,7 @@ export default function Candidate()
                   </div>
           <div className='card-info'>
           <div className='id'>ID: 1234</div>
-                  <Button text='Vote' />
+                  <Button text='Vote' handleClick={null} />
             </div>
           </div>
     </div>
