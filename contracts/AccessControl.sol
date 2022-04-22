@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
-import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @dev All function calls are currently implemented without side effects
-contract AccessControl is Ownable{
+contract AccessControl {
 
      /** 
      @param role Admin right to be granted
@@ -35,6 +34,12 @@ contract AccessControl is Ownable{
         require(roles[_role][msg.sender], "not authorized");
         _;
     }
+   ///@dev checks if an account is a chairman or a teacher
+    modifier isChairOrTeach() {
+        require(roles[Chairman][msg.sender] || roles[Teachers][msg.sender], "Must be Teacher or Chairman");
+        _;
+    }
+
 
     /// @notice admin rights are given to the deployer address
     constructor() {
@@ -53,20 +58,46 @@ contract AccessControl is Ownable{
      *  @param _account  address to be granted _role rights.
      *  @param _role hash for role.
      */
-    function grantRole(bytes32 _role, address _account) external onlyOwner {
+    function grantRole(bytes32 _role, address _account) external onlyRole(Chairman) {
         _grantRole(_role, _account);
     }
 
     /// @dev verify if an address has chairman rights
-    function isChairman(address _address) public view returns (bool) {
+    function isChairman(address _address) external view returns (bool) {
         return roles[Chairman][_address];
     }
 
-    /// @dev verify if an address has chairman rights
-    function isBoard(address _address) public view returns (bool) {
+    /// @dev verify if an address has Board member rights
+    function isBoard(address _address) external view returns (bool) {
         return roles[Board][_address];
     }
 
+    /// @dev verify if an address has Teachers rights
+    function isTeacher(address _address) external view returns (bool) {
+        return roles[Teachers][_address];
+    }
+
+    /// @dev verify if an address is a student 
+    function isStudent(address _address) external view returns (bool) {
+        return roles[Students][_address];
+    }
+    /// @notice verify if an address is an admin
+    
+    /**
+        @param _address user address to be verified
+        @dev its used to check if an account has a role or not
+     */
+    function getUserRole(address _address) public view returns (string memory) {
+        if (roles[Chairman][_address]) return "Chairman";
+
+        if (roles[Board][_address]) return "Board";
+
+        if (roles[Teachers][_address]) return "Teachers";
+
+        if (roles[Students][_address]) return "Students";
+        return "not registered";
+
+    }
 
     /** 
         @dev allows removal of roles 
@@ -74,7 +105,7 @@ contract AccessControl is Ownable{
         @param _account   address to be removed 
         @param _role hash for role
 */
-    function removeRole(bytes32 _role, address _account) external onlyOwner {
+    function removeRole(bytes32 _role, address _account) external onlyRole(Chairman) {
         roles[_role][_account] = false; // remove role to the inputed address
         emit RemoveRoles(_role, _account);
     }
