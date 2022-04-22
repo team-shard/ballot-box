@@ -1,0 +1,31 @@
+.widget{
+    border: 2px solid #555;
+    margin: 2rem;
+    border-radius: 10px;
+
+}
+.widget-header{
+    padding: 2rem;
+}
+
+.widget-body{
+    display: flex;
+    padding: 2rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    
+}
+.widget-title{
+    margin-bottom: 2rem;
+}
+.election-title{
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-right: 4rem;
+}
+.candidate-list{
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    align-items: center;
+}

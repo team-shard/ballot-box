@@ -1,0 +1,16 @@
+.Teacher{
+    color: white;
+    display: flex;
+}
+.container{
+ flex: 6;
+}
+
+.widgets{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    
+}
