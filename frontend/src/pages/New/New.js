@@ -11,7 +11,7 @@ export default function New() {
       <div className='container'>
   
         <div className='container-body'>
-         <Card title='Register New User' subtitle='Add new student to ZURI DAO'/>
+         {/* <Card title='Register New User' subtitle='Add new student to ZURI DAO'/> */}
          <Card title='Add New Contestant' subtitle='Create New contestant to participate in election'/>
         </div>
       </div>

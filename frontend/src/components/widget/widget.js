@@ -1,6 +1,8 @@
 
 import Candidate from '../candidate/Candidate'
 import './widget.css'
+import Control2 from "../../contracts/ShardDAO.json";
+import { ethers } from 'ethers';
 
 export default function Widget() {
   return (
@@ -14,14 +16,9 @@ export default function Widget() {
       <div className='widget-body'>
       <div className='election-title'>Presidential Vote</div>
         <div className='candidate-list'>
+          
         <Candidate />
-        <Candidate />
-        <Candidate />
-        <Candidate />
-        <Candidate />
-        <Candidate />
-        <Candidate />
-        <Candidate />
+      
         </div>
         </div>
       
