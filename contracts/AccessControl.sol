@@ -34,7 +34,7 @@ contract AccessControl {
         require(roles[_role][msg.sender], "not authorized");
         _;
     }
-
+   ///@dev checks if an account is a chairman or a teacher
     modifier isChairOrTeach() {
         require(roles[Chairman][msg.sender] || roles[Teachers][msg.sender], "Must be Teacher or Chairman");
         _;
@@ -82,7 +82,11 @@ contract AccessControl {
         return roles[Students][_address];
     }
     /// @notice verify if an address is an admin
-
+    
+    /**
+        @param _address user address to be verified
+        @dev its used to check if an account has a role or not
+     */
     function getUserRole(address _address) public view returns (string memory) {
         if (roles[Chairman][_address]) return "Chairman";
 
