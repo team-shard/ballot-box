@@ -36,7 +36,7 @@ contract AccessControl {
     }
 
     modifier isChairOrTeach() {
-        require(roles[Chairman][msg.sender] || roles[Teachers][msg.sender]);
+        require(roles[Chairman][msg.sender] || roles[Teachers][msg.sender], "Must be Teacher or Chairman");
         _;
     }
 
@@ -63,26 +63,26 @@ contract AccessControl {
     }
 
     /// @dev verify if an address has chairman rights
-    function isChairman(address _address) public view returns (bool) {
+    function isChairman(address _address) external view returns (bool) {
         return roles[Chairman][_address];
     }
 
     /// @dev verify if an address has Board member rights
-    function isBoard(address _address) public view returns (bool) {
+    function isBoard(address _address) external view returns (bool) {
         return roles[Board][_address];
     }
 
     /// @dev verify if an address has Teachers rights
-    function isTeacher(address _address) public view returns (bool) {
+    function isTeacher(address _address) external view returns (bool) {
         return roles[Teachers][_address];
     }
 
     /// @dev verify if an address is a student 
-    function isStudent(address _address) public view returns (bool) {
+    function isStudent(address _address) external view returns (bool) {
         return roles[Students][_address];
     }
     /// @notice verify if an address is an admin
-    function isAdminSH(address _address) public view returns(bool){
+    function isAdminSH(address _address) external view returns(bool){
         return roles[Chairman][_address] || roles[Board][_address] || roles[Teachers][_address];
     }
 
