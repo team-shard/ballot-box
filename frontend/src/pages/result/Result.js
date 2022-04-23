@@ -19,9 +19,9 @@ const startElection = async () => {
     if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const shardContract = new ethers.Contract("0x6A08244EF41483B197847630709919BE209135A5", Shard.abi, signer);
+      const shardContract = new ethers.Contract("0xd6c1AdD1B7C7Af82B0d919C39C48A7f008D3B4d7", Shard.abi, signer);
     
-      let start = await shardContract.startElection(600);
+      let start = await shardContract.startElection(1000);
       await setElectionHasStarted(true);
       console.log("getuser:",start)
       
@@ -41,7 +41,7 @@ const endElection = async () => {
       const signer = provider.getSigner();
       const shardContract = new ethers.Contract("0x6A08244EF41483B197847630709919BE209135A5", Shard.abi, signer);
     
-      let start = await shardContract.endElection(600);
+      let start = await shardContract.endElection();
       await setElectionHasStarted(true);
       console.log("getuser:",start)
       
