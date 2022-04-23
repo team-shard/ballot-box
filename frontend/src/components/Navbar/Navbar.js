@@ -15,7 +15,7 @@ export default function Navbar() {
      
         <div className='nav-items'>
           <Button text={address} />
-          <a> Create New Election <Add /></a>
+          {/* <a> Create New Election <Add /></a> */}
           </div>
 </div>
     </div>

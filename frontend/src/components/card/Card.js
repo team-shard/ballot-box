@@ -12,6 +12,8 @@ export default function Card({ title, subtitle })
         contestantAddress: '',
         contestantName: '',
     });
+    const [constantAddress, setConstantAddress] = useState('');
+    const [constantName, setConstantName] = useState('');
     const handleChange = (e) =>
     { 
         setState({
@@ -49,7 +51,7 @@ export default function Card({ title, subtitle })
             const signer = provider.getSigner();
             const shardDAOContract = new ethers.Contract(contractAddress, Control2.abi, signer);
     
-              const value = await shardDAOContract.addContestant("contestantName", "contestantAddress");
+              const value = await shardDAOContract.addContestant([contestantName], contestantAddress);
             //   const {contestantName, contestantAddress} = value;
               console.log(value);
             //   setState({
@@ -58,17 +60,8 @@ export default function Card({ title, subtitle })
             //   })
               
              
-            // votersCleaned = voters.forEach(voter => {
-            //   votersCleaned.push({
-            //     contestantID: voter.contestantAddress,
-            //     contestantName: voter.contestantName,
-            //     voteCount: voter.voteCount,
-            //     timestamp: new Date(voter.timestamp * 1000),
-               
-            //   });
-        
+           
     
-            // setAllWaves(wavesCleaned);
           } else {
             console.log("Ethereum object doesn't exist!")
           }
