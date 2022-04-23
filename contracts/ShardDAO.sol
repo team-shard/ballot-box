@@ -54,7 +54,7 @@ contract ShardDAO is Pausable, AccessControl {
     // Time that voters have to vote since startTime;
     uint public timeToVote;
 
-    bool public isOnging;
+    bool isOnging;
 
     /// The vote has been called too late.
     error TooLate();

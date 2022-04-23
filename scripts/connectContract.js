@@ -14,7 +14,7 @@ const main = async () => {
     accountBalance.toString()
   );
 
-  const contractAddress = "0x6A08244EF41483B197847630709919BE209135A5";
+  const contractAddress = "0x39fa7f1055001EF60152A96e0B41b54eD1c40D3c";
   const myContract = await ethers.getContractAt("ShardDAO",contractAddress);
 
   let myBalance = await myContract.getAllContestants();

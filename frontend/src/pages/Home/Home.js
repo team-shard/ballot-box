@@ -34,7 +34,7 @@ export default function Home() {
         if(data.role === "not registered"){
           navigate("/register",{replace:true})
         }
-        else {data.isAdmin ? navigate("/admin/name",{replace:true}):navigate("/election",{replace:true})}
+        else {data.isAdmin ? navigate("/admin",{replace:true}):navigate("/election",{replace:true})}
        })
       
       } 
@@ -52,7 +52,7 @@ export default function Home() {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const shardContract = new ethers.Contract("0x6A08244EF41483B197847630709919BE209135A5", Shard.abi, signer);
+        const shardContract = new ethers.Contract("0xd6c1AdD1B7C7Af82B0d919C39C48A7f008D3B4d7", Shard.abi, signer);
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const account = accounts[0];
         console.log("account :",account)
