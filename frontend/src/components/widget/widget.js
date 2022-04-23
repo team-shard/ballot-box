@@ -3,19 +3,19 @@ import Candidate from '../candidate/Candidate'
 import './widget.css'
 import Control2 from "../../contracts/ShardDAO.json";
 import { ethers } from 'ethers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const info = [
-  {
-    ID: 0,
-    name: 'Litmus'
-  },
-  {
-    ID: 1,
-    name: 'Litmus2'
-  },
+// const info = [
+//   {
+//     ID: 0,
+//     name: 'Litmus'
+//   },
+//   {
+//     ID: 1,
+//     name: 'Litmus2'
+//   },
 
-]
+// ]
 export default function Widget()
 {
   const [contestantName, setcontestantName] = useState([])
@@ -39,7 +39,8 @@ export default function Widget()
         
         setcontestantName(voters[0])
         setcontestantAddress(voters[1])
-        console.log( contestantAddress, contestantName);
+
+      
 
         
 
@@ -51,7 +52,11 @@ export default function Widget()
       console.log(error);
     }
   }
-  console.log( getAllContestants());
+ 
+  useEffect(() => {
+   getAllContestants()
+  }, [contestantName, contestantAddress])
+  
  
   return (
     <div className='widget'>
@@ -67,7 +72,7 @@ export default function Widget()
         { contestantName.map((contestant, index) =>
         
            (
-            <div className='candidate-list'>
+            <div className='candidate-list' key={index}>
               <Candidate contestantName={contestant} contestantID={index} />
             </div>
           )

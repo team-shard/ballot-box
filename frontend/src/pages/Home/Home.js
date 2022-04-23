@@ -34,12 +34,12 @@ export default function Home() {
         if(data.role === "not registered"){
           navigate("/result",{replace:true})
         }
-        else {data.isAdmin ? navigate("/admin",{replace:true}):navigate("/election",{replace:true})}
+        else {data.isAdmin ? navigate("/admin/name",{replace:true}):navigate("/election",{replace:true})}
        })
       
       } 
       else {
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our App");
         console.log("No Metamask detected");
       }
     } catch (error) {
@@ -96,7 +96,8 @@ export default function Home() {
     World Class Organisation where tech talents are brewed
     </h1>
     <p> Register now to kickstart your career 
-    </p>
+      </p>
+     
    <Button text={isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"} handleClick={checkIfWalletIsConnected} /> 
     </div>
 

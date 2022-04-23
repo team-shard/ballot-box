@@ -3,12 +3,13 @@ import './Candidate.css'
 import { ethers } from 'ethers';
 import Control from "../../contracts/AccessControl.json";
 import Control2 from "../../contracts/ShardDAO.json";
+import { useState } from 'react';
 
 
 export default function Candidate({contestantName, contestantID})
 {
   const contractAddress = "0x6A08244EF41483B197847630709919BE209135A5"
- 
+ const [voted,setVoted] = useState(false)
 
 
   const vote = async () => {
@@ -24,6 +25,7 @@ export default function Candidate({contestantName, contestantID})
         console.log("Retrieved total vote count...", count.toNumber());
 
         const voteTxn = await shardDAOContract.vote(contestantID);
+        setVoted(true)
         console.log("Mining...", voteTxn.hash);
 
         await voteTxn.wait();
