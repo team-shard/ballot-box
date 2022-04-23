@@ -1,7 +1,7 @@
 # ShardDAO
-###Deployed Dapp: https://shard.surge.sh/
-####Deployed Contract: https://rinkeby.etherscan.io/address/0xd6c1AdD1B7C7Af82B0d919C39C48A7f008D3B4d7
-####This project demonstrates a Ballot Voting system that is implemented with 4 stackholder positions in mind:
+### Deployed Dapp: https://shard.surge.sh/
+#### Deployed Contract: https://rinkeby.etherscan.io/address/0xd6c1AdD1B7C7Af82B0d919C39C48A7f008D3B4d7
+#### This project demonstrates a Ballot Voting system that is implemented with 4 stackholder positions in mind:
 
 1. Chairman (has the highest access priviledge)
 2. Teacher
