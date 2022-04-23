@@ -34,7 +34,7 @@ export default function Home() {
         if(data.role === "not registered"){
           navigate("/result",{replace:true})
         }
-        else {data.isAdmin ? navigate("/chairmain",{replace:true}):navigate("/election",{replace:true})}
+        else {data.isAdmin ? navigate("/admin",{replace:true}):navigate("/election",{replace:true})}
        })
       
       } 
