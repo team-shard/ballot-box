@@ -13,6 +13,7 @@ import { ethers, utils } from "ethers";
 import Control from "./contracts/AccessControl.json";
 import Shard from "./contracts/ShardDAO.json";
 import React, { useEffect, useState } from "react";
+import Register from './pages/register/reigster';
 
 
 function App()
@@ -46,6 +47,7 @@ function App()
               <Route path='new' element={<New/>} />
             </Route>
             <Route path="election" element={<Election />} />
+            <Route path="register" element={<Register/>} />
           </Route>
         </Routes>
       </BrowserRouter>

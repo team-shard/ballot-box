@@ -21,7 +21,7 @@ const startElection = async () => {
       const signer = provider.getSigner();
       const shardContract = new ethers.Contract("0x6A08244EF41483B197847630709919BE209135A5", Shard.abi, signer);
     
-      let start = await shardContract.startElection(600);
+      let start = await shardContract.startElection(1000);
       await setElectionHasStarted(true);
       console.log("getuser:",start)
       

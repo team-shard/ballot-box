@@ -32,7 +32,7 @@ export default function Home() {
         console.log("user:",data.role)
         console.log("isAdmin :",data.isAdmin)
         if(data.role === "not registered"){
-          navigate("/result",{replace:true})
+          navigate("/register",{replace:true})
         }
         else {data.isAdmin ? navigate("/admin",{replace:true}):navigate("/election",{replace:true})}
        })
