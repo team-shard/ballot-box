@@ -81,6 +81,23 @@ describe("AccessControl", function () {
         await accessControl.isBoard(_account);
         
     });
-    
+    it("check if address is a a Teacher ", async function(){
+        let _account = accounts[3].address;
+        console.log("Checking...");
+        await accessControl.isTeacher(_account);
+        
+    });
+    it("check if address is a a student", async function(){
+        let _account = accounts[3].address;
+        console.log("Checking...");
+        await accessControl.isStudent(_account);
+        
+    });
+    it("Getting if an address has a role and returning it", async function(){
+        let _account = accounts[3].address;
+        console.log("Checking...");
+        await accessControl.getUserRole(_account);
+        
+    });
 
 });

@@ -24,74 +24,10 @@ function App()
   const [customerAddress, setCustomerAddress] = useState(null);
   const [modal, setModal] = useState(false);
   const [error, setError] = useState(null);
-  const [isAdmin, setUser] = useState(false);
+  
   
 
-  // const checkIfWalletIsConnected = async () => {
-  //   try {
-  //     if (window.ethereum) {
-  //       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-  //       const account = accounts[0];
-  //       setIsWalletConnected(true);
-  //       setCustomerAddress(account);
-  //       console.log("Account Connected: ", account);
-  //     } else {
-  //       setError("Please install a MetaMask wallet to use our bank.");
-  //       console.log("No Metamask detected");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  // const getUserRole = async () => {
-  //   try {
-  //     if (window.ethereum) {
-  //       const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //       const signer = provider.getSigner();
-  //       const controlContract = new ethers.Contract(0x7b69499D987ba0058A7AB30C6F8dA54c5168deF4, Control.abi, signer);
   
-  //       let role = await controlContract.isAdminSH(signer);
-  //       setUser(true);
-  //     } else {
-  //       console.log("Ethereum object not found, install Metamask.");
-  //       setError("Please install a MetaMask wallet to use our bank.");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   const getData = async () => {
-
-     
-  //       checkIfWalletIsConnected();
-        
-  //       getUserRole();
-  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //     const signer = provider.getSigner();
-  //     const address = signer.getAddress();
-      
-  //     const shardDAO = new Contract(
-  //       "0x0dD19D155ba6bc04106801B05d21FFfCa32521Ea",
-  //       Shard.abi,
-  //       provider
-  //     );
-  //     const controlContract = new Contract(
-  //       "0x7b69499D987ba0058A7AB30C6F8dA54c5168deF4 ",
-  //       Control.abi,
-  //       provider
-  //     );
-
-  //     setDAOMethod(shardDAO.connect(signer));
-  //     setControlMethods(controlContract.connect(signer));
-      
-      
-     
-  //   };
-  //   getData().then(() => {});
-  // }, [isWalletConnected]);
   //Creating 4 public routes ,
   //Home, Admin, Election, Student
   //and 3 private routes ,
@@ -102,7 +38,7 @@ function App()
       <BrowserRouter>
         <Routes>
           <Route path="/">
-            <Route index element={<Home />} />  
+            <Route index element={<Home/>} />  
             <Route path="admin" >
             <Route index element={<Teacher />} />  
               <Route path='chairman' element={<Chairman/>} />
