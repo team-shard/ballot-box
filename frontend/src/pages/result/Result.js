@@ -12,6 +12,8 @@ export default function Result() {
 const [error, setError] = useState(null);
 const[isElectionStarted,setElectionHasStarted] = useState(false);
 const[isElectionPaused,setElectionHasPaused] = useState(false);
+const[isWalletConnected,setIsWalletConnected] = useState(false);
+const [customerAddress, setCustomerAddress] = useState("");
 
 
 const startElection = async () => {
