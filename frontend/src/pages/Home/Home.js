@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router';
 import Control from "../../contracts/AccessControl.json";
 import Chairman from '../Admin/Chairman';
 import Shard from "../../contracts/ShardDAO.json";
+import { Link } from 'react-router-dom';
 export  var  address;
 
 export default function Home() {
@@ -97,8 +98,10 @@ export default function Home() {
     </h1>
     <p> Register now to kickstart your career 
       </p>
-     
-   <Button text={isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"} handleClick={checkIfWalletIsConnected} /> 
+      <Link to='/election'>
+      <Button text={isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"} handleClick={checkIfWalletIsConnected} /> 
+      </Link>
+  
     </div>
 
   )
