@@ -8,11 +8,12 @@ import { useNavigate } from 'react-router';
 import Control from "../../contracts/AccessControl.json";
 import Chairman from '../Admin/Chairman';
 import Shard from "../../contracts/ShardDAO.json";
+import addressShortner from '../../utils/addressShortner';
 export  var  address;
 
 export default function Home() {
   const[isWalletConnected,setIsWalletConnected] = useState(false);
-  const [customerAddress, setCustomerAddress] = useState(null);
+  const [customerAddress, setCustomerAddress] = useState("");
   const [modal, setModal] = useState(false);
   const [error, setError] = useState(null);
   const [isAdmin, setAdmin] = useState(false);
@@ -61,7 +62,11 @@ export default function Home() {
         console.log("getuser:",role)
         setUser(role);
         var isAdmin;
-        if(role === "Chairman"||"Board"||"Teachers"){setAdmin(true); isAdmin = true};
+        if(role === "Chairman"){setAdmin(true); isAdmin = true}
+        if(role === "Board"){setAdmin(true); isAdmin = true}
+        if(role === "Teachers"){setAdmin(true); isAdmin = true}
+        if(role === "Students"){setAdmin(true); isAdmin = false}
+        
         console.log("userRole",role);
         return {role,isAdmin};
     
