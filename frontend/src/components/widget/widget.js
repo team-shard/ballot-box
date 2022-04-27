@@ -21,7 +21,7 @@ export default function Widget()
   const [contestantName, setcontestantName] = useState([])
   const [contestantAddress, setcontestantAddress] = useState([])
   // var contestantName, contestantAddress
-  const contractAddress = "0x6A08244EF41483B197847630709919BE209135A5"
+  const contractAddress = "0xd6c1AdD1B7C7Af82B0d919C39C48A7f008D3B4d7"
   
    const getAllContestants = async () => {
     try
