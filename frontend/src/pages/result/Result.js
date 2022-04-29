@@ -97,7 +97,7 @@ const unPauseElection = async () => {
   }
 }
   return (
-    <div className="result">
+    <div className="result">  
       <Navbar />
       <div className="container">
         <h1>Ongoing Election</h1>
@@ -106,10 +106,15 @@ const unPauseElection = async () => {
             <div className='button'><Button text= "Pause Election" handleClick = {pauseElection}/> <span> | </span> <Button text="unPause Election" handleClick={unPauseElection} /></div>
             
           </div>
-         <div className='button'><Button text= "Start Election" handleClick = {startElection}/> <span> | </span> <Button text="End Election" handleClick={endElection} /></div>
-          
-</div>
+          <div className='button'><Button text="Start Election" handleClick={startElection} /> <span> | </span> <Button text="End Election" handleClick={endElection} /> <span> | </span>  <input
+            type='number'
+            placeholder="Election Duration in Hours"
+            name='contestantName'
+            // value={state.duration }
+            // onChange={handleChange}
+            /> </div>
+          </div>
         </div>
-    </div>
+      </div>
   )
 };
