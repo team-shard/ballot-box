@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
+import { ElectionDuration } from '../../pages/result/Result'
 import './countdown.css'
+
 
 const Countdown = () =>
 {
+    console.log(ElectionDuration);
     const calculateTimeLeft = () =>
     {
         let year = new Date().getFullYear()
-        let difference = +new Date(`10/01/${year}`) - +new Date()
+        let difference = ElectionDuration
 
         let timeLeft = {}
 

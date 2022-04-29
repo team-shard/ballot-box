@@ -7,13 +7,14 @@ import { ethers, utils } from "ethers";
 import Shard from "../../contracts/ShardDAO.json";
 import React, { useEffect, useState } from "react";
 
-
+export var ElectionDuration;
 export default function Result() {
 const [error, setError] = useState(null);
 const[isElectionStarted,setElectionHasStarted] = useState(false);
 const[isElectionPaused,setElectionHasPaused] = useState(false);
 const[isWalletConnected,setIsWalletConnected] = useState(false);
 const [customerAddress, setCustomerAddress] = useState("");
+const [duration, setDuration] = useState("")
 
 
 const startElection = async () => {
@@ -56,6 +57,7 @@ const endElection = async () => {
   }
 }
 
+  
 const pauseElection = async () => {
   try {
     if (window.ethereum) {
@@ -95,7 +97,17 @@ const unPauseElection = async () => {
   } catch (error) {
     console.log(error);
   }
-}
+  
+  }
+  const electionDuration = (e) =>
+  {
+    e.preventDefault()
+    ElectionDuration = e.target.value
+    setDuration(ElectionDuration)
+    
+
+  }
+  console.log(duration, ElectionDuration)
   return (
     <div className="result">  
       <Navbar />
@@ -109,10 +121,15 @@ const unPauseElection = async () => {
           <div className='button'><Button text="Start Election" handleClick={startElection} /> <span> | </span> <Button text="End Election" handleClick={endElection} /> <span> | </span>  <input
             type='number'
             placeholder="Election Duration in Hours"
-            name='contestantName'
-            // value={state.duration }
-            // onChange={handleChange}
-            /> </div>
+            name='duration'
+            value={duration }
+            onChange={electionDuration}
+            
+          />
+            <Button text="Set Duration" handleClick={()=> setDuration(duration)} />
+            
+         
+          </div>
           </div>
         </div>
       </div>
