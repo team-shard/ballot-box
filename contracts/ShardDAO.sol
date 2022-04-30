@@ -105,7 +105,7 @@ contract ShardDAO is Pausable, AccessControl {
     /// @return contestantName names of all contestants.
     /// @return contestantAddress address of all contestants.
     /// @return voteCount of all contestants.
-    function getAllContestants() external view isChairOrTeach
+    function getAllContestants() external view
     returns(string[] memory, address[] memory, uint[] memory) {
         uint len = contestants.length;
 
