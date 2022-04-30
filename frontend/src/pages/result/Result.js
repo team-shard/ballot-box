@@ -17,6 +17,25 @@ const [customerAddress, setCustomerAddress] = useState("");
 const [duration, setDuration] = useState("")
 
 
+  const getWinner = async () =>
+  {
+    try {
+      if (window.ethereum) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const shardContract = new ethers.Contract("0xd6c1AdD1B7C7Af82B0d919C39C48A7f008D3B4d7", Shard.abi, signer);
+      
+        let start = await shardContract.winnerNameAndAddress();
+       
+        
+      } else {
+        console.log("Ethereum object not found, install Metamask.");
+        setError("Please install a MetaMask wallet to use our bank.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 const startElection = async () => {
   try {
     if (window.ethereum) {
