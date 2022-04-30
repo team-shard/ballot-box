@@ -25,7 +25,9 @@ const [duration, setDuration] = useState("")
         const signer = provider.getSigner();
         const shardContract = new ethers.Contract("0xd6c1AdD1B7C7Af82B0d919C39C48A7f008D3B4d7", Shard.abi, signer);
       
-        let start = await shardContract.winnerNameAndAddress();
+        let winner = await shardContract.winnerNameAndAddress({ gasLimit: 300000 })
+        console.log(winner);
+        return winner;
        
         
       } else {
@@ -36,6 +38,8 @@ const [duration, setDuration] = useState("")
       console.log(error);
     }
   }
+
+  getWinner();
 const startElection = async () => {
   try {
     if (window.ethereum) {
@@ -76,7 +80,7 @@ const endElection = async () => {
   }
 }
 
-  
+
 const pauseElection = async () => {
   try {
     if (window.ethereum) {
@@ -126,7 +130,6 @@ const unPauseElection = async () => {
     
 
   }
-  console.log(duration, ElectionDuration)
   return (
     <div className="result">  
       <Navbar />
